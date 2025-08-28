@@ -87,9 +87,13 @@
 
 &i2c2 {
     tas2563_codec: tas2563_codec@4c {
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_tas2563>;
         compatible = "ti,tas2563";
         reg = <0x4c>;
         #sound-dai-cells = <1>;
+        interrupt-parent = <&gpio1>;
+        interrupts = <0>;
         shutdown-gpios = <&gpio1 1 0>;
         ti,imon-slot-no = <0>;
         status = "okay" ;
@@ -100,10 +104,15 @@
     pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_custom_gpios>;
 
-    pinctrl_custom_gpios: custom_gpios_grp {
-		fsl,pins = <
+    pinctrl_tas2563: tas2563_grp {
+        fsl,pins = <
             MX6UL_PAD_GPIO1_IO00__GPIO1_IO00    0xb0    // AMP_nIRQ
             MX6UL_PAD_GPIO1_IO01__GPIO1_IO01    0xb0    // SOM_AMP_PWR_EN
+		>;
+    };
+
+    pinctrl_custom_gpios: custom_gpios_grp {
+		fsl,pins = <
             MX6UL_PAD_GPIO1_IO02__GPIO1_IO02    0xb0    // I2C_nINT
             MX6UL_PAD_CSI_MCLK__GPIO4_IO17      0xb0    // DIP_SW
             MX6UL_PAD_CSI_DATA00__GPIO4_IO21    0xb0    // HW_REV1
