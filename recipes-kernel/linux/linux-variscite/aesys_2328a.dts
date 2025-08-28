@@ -11,4 +11,107 @@
 / {
 	model = "AESYS 2328A";
 	compatible = "variscite,imx6ul-var-dart", "fsl,imx6ull";
+
+    backlight {
+        status = "disabled";
+    };
+
+    keys {
+        status = "disabled";
+    };
+
+    sound {
+        status = "disabled";
+    };
+
+    sound-tas2563 {
+        compatible = "simple-audio-card";
+        simple-audio-card,name = "tas2563";
+        simple-audio-card,format = "i2s";
+        simple-audio-card,bitclock-inversion;
+        simple-audio-card,frame-master = <&tas2563cpu>;
+        simple-audio-card,bitclock-master = <&tas2563cpu>;
+        status = "okay";
+        
+        tas2563cpu: simple-audio-card,cpu {
+            sound-dai = <&sai2>;
+            dai-tdm-slot-num = <2>;
+            dai-tdm-slot-width = <16>;
+        };
+
+        simple-audio-card,codec {
+            sound-dai = <&tas2563_codec>;
+        };
+    };
+};
+
+&codec {
+    status = "disabled";
+};
+
+&touch_3v3_regulator {
+    status = "disabled";
+};
+
+&adc1 {
+    status = "disabled";
+};
+
+&tsc {
+    status = "disabled";
+};
+
+&uart2 {
+    status = "disabled";
+};
+
+&can1 {
+    status = "disabled";
+};
+
+&lcdif {
+    status = "disabled";
+};
+
+&pwm1 {
+    status = "disabled";
+};
+
+&usbotg1 {
+    dr_mode = "peripheral";
+};
+
+&usbotg2 {
+    status = "disabled";
+};
+
+&i2c2 {
+    tas2563_codec: tas2563_codec@4c {
+        compatible = "ti,tas2563";
+        reg = <0x4c>;
+        #sound-dai-cells = <1>;
+        shutdown-gpios = <&gpio1 1 0>;
+        ti,imon-slot-no = <0>;
+        status = "okay" ;
+    };
+};
+
+&iomuxc {
+    pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_custom_gpios>;
+
+    pinctrl_custom_gpios: custom_gpios_grp {
+		fsl,pins = <
+            MX6UL_PAD_GPIO1_IO00__GPIO1_IO00    0xb0    // AMP_nIRQ
+            MX6UL_PAD_GPIO1_IO01__GPIO1_IO01    0xb0    // SOM_AMP_PWR_EN
+            MX6UL_PAD_GPIO1_IO02__GPIO1_IO02    0xb0    // I2C_nINT
+            MX6UL_PAD_CSI_MCLK__GPIO4_IO17      0xb0    // DIP_SW
+            MX6UL_PAD_CSI_DATA00__GPIO4_IO21    0xb0    // HW_REV1
+            MX6UL_PAD_CSI_DATA01__GPIO4_IO22    0xb0    // HW_REV2
+            MX6UL_PAD_CSI_DATA02__GPIO4_IO23    0xb0    // HW_REV3
+            MX6UL_PAD_CSI_DATA03__GPIO4_IO24    0xb0    // HW_REV4
+            MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01  0xb0    // General purpose GPIO
+            MX6UL_PAD_SNVS_TAMPER3__GPIO5_IO03  0xb0    // USB_nPRES
+		>;
+	};
 };

@@ -3,7 +3,12 @@ COPYSOURCE := "${THISDIR}/${PN}"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
+SRC_URI += " file://Aesys-Kernel-Config-Fragment.cfg"
 SRC_URI += " file://0001-YYLTYPE-fix.patch"
+SRC_URI += " file://0002-Add-TI2562-Driver-Support.patch"
+
+# Manage kernel configuration fragments
+DELTA_KERNEL_DEFCONFIG:append = "Aesys-Kernel-Config-Fragment.cfg"
 
 do_patch:append(){
 
