@@ -20,33 +20,31 @@
         status = "disabled";
     };
 
-    sound {
-        status = "disabled";
-    };
+    /delete-node/ sound;
 
-    sound-tas2563 {
+    sound {
+        #address-cells = <1>;
+	    #size-cells = <0>;
+
         compatible = "simple-audio-card";
         simple-audio-card,name = "tas2563";
         simple-audio-card,format = "i2s";
         simple-audio-card,bitclock-inversion;
-        simple-audio-card,frame-master = <&tas2563cpu>;
-        simple-audio-card,bitclock-master = <&tas2563cpu>;
+        simple-audio-card,frame-master = <&cpu_dai>;
+        simple-audio-card,bitclock-master = <&cpu_dai>;
         status = "okay";
         
-        tas2563cpu: simple-audio-card,cpu {
+        cpu_dai: simple-audio-card,cpu {
             sound-dai = <&sai2>;
             dai-tdm-slot-num = <2>;
             dai-tdm-slot-width = <16>;
         };
 
-        simple-audio-card,codec {
+        codec_dai: simple-audio-card,codec {
             sound-dai = <&tas2563_codec>;
+            system-clock-frequency = <12288000>;
         };
     };
-};
-
-&codec {
-    status = "disabled";
 };
 
 &touch_3v3_regulator {
@@ -86,18 +84,30 @@
 };
 
 &i2c2 {
+    /delete-node/ wm8904@1a;
+};
+
+&i2c1 {
     tas2563_codec: tas2563_codec@4c {
         pinctrl-names = "default";
         pinctrl-0 = <&pinctrl_tas2563>;
         compatible = "ti,tas2563";
         reg = <0x4c>;
-        #sound-dai-cells = <1>;
+        #sound-dai-cells = <0>;
+        clocks = <&clks IMX6UL_CLK_SAI2>;
+		clock-names = "mclk";
         interrupt-parent = <&gpio1>;
         interrupts = <0>;
         shutdown-gpios = <&gpio1 1 0>;
-        ti,imon-slot-no = <0>;
         status = "okay" ;
     };
+
+    eeprom: eeprom@50 {
+		compatible = "st,24c08";
+		reg = <0x50>;
+		pagesize = <16>;
+		num-addresses = <4>;
+	};
 };
 
 &iomuxc {

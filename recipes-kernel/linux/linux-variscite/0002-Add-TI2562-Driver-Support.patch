@@ -128,7 +128,7 @@ diff --git a/sound/soc/codecs/tas2562.c b/sound/soc/codecs/tas2562.c
 new file mode 100755
 --- /dev/null
 +++ b/sound/soc/codecs/tas2562.c
-@@ -0,0 +1,783 @@
+@@ -0,0 +1,779 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
 +// Driver for the Texas Instruments TAS2562 CODEC
@@ -820,8 +820,6 @@ new file mode 100755
 +	ret = fwnode_property_read_u32(dev->fwnode, "ti,imon-slot-no",
 +			&tas2562->i_sense_slot);
 +	if (ret) {
-+		dev_err(dev, "Property %s is missing setting default slot\n",
-+			"ti,imon-slot-no");
 +		tas2562->i_sense_slot = 0;
 +	}
 +
@@ -829,8 +827,6 @@ new file mode 100755
 +	ret = fwnode_property_read_u32(dev->fwnode, "ti,vmon-slot-no",
 +			&tas2562->v_sense_slot);
 +	if (ret) {
-+		dev_info(dev, "Property %s is missing setting default slot\n",
-+			"ti,vmon-slot-no");
 +		tas2562->v_sense_slot = 2;
 +	}
 +
